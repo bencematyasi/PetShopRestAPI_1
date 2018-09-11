@@ -13,11 +13,11 @@ namespace PetShopApp.Core.DomainService
 
         IEnumerable<Pet> ReadAll();
 
-        Pet ReadOne(int id);
+        //Pet ReadOne(int id);
 
         Pet Update(Pet petUpdate);
 
-        Pet Delete(int id);
+        void Delete(int id);
         
     }
 }

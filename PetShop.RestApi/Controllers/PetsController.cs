@@ -19,36 +19,46 @@ namespace PetShop.RestApi.Controllers
             _petservice = petService;
         }
 
-        // GET api/values
+        // GET api/pets
         [HttpGet]
         public ActionResult<IEnumerable<Pet>> Get()
         {
             return _petservice.GetAllPets();
         }
 
-        // GET api/values/5
+        // GET api/pets/1
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Pet> Get(int id)
         {
-            return "value";
+            return _petservice.FindPetById(id);
         }
 
-        // POST api/values
+        // POST api/pets
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Pet pet)
         {
+            _petservice.NewPet(pet);
         }
 
-        // PUT api/values/5
+        // PUT api/pets/1
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult<Pet> Put(int id, [FromBody] Pet pet)
         {
+            if (id < 1 || id != pet.Id)
+            {
+                return BadRequest("Parameter id and pet Id must be the same");
+            }
+            return _petservice.UpdatePet(pet);
+
         }
 
-        // DELETE api/values/5
+
+        // DELETE api/pets/1
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult<Pet> Delete(int id)
         {
+            _petservice.DeletePet(id);
+            return Ok("Deleted");
         }
     }
 }

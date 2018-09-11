@@ -2,70 +2,55 @@
 using PetShopApp.Core.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PetShopApp.Infrastructure.Static.Data.Repositories
 {
     public class OwnerRepository : IOwnerRepository
     {
-        static int id = 1;
-        private List<Owner> _owners = new List<Owner>();
-
-        public Owner Create(Owner owner)
+        
+        public Owner CreatOwner(Owner owner)
         {
-            owner.Id = id++;
-            _owners.Add(owner);
+            owner.Id = FakeDB.OwnerId++;
+            var owners = FakeDB.Owners.ToList();
+            owners.Add(owner);
+            FakeDB.Owners = owners;
             return owner;
-
         }
 
-        public Owner Delete(int id)
+        public void DeleteOwner(int id)
         {
-            var ownerFound = this.ReadById(id);
-            if (ownerFound != null)
-            {
-                _owners.Remove(ownerFound);
-                return ownerFound;
-            }
-            return null;
+            var owners = FakeDB.Owners.ToList();
+            var ownerToDelete = owners.FirstOrDefault(o => o.Id == id);
+            owners.Remove(ownerToDelete);
+            FakeDB.Owners = owners;
+        }
+
+        public Owner GetOwnerById(int id)
+        {
+            return FakeDB.Owners.FirstOrDefault(owner => owner.Id == id);
         }
 
         public IEnumerable<Owner> ReadAll()
         {
-            return _owners;
+            return FakeDB.Owners.ToList();
         }
 
-        public Owner ReadById(int id)
+        public Owner UpdateOwner(Owner ownerUpdate)
         {
-            foreach (var owner in _owners)
-            {
-                if (owner.Id == id)
-                {
-                    return owner;
-                }
-            }
-            return null;
 
-        }
-
-        public Owner ReadOne(int id)
-        {
-            return _owners[id];
-        }
-
-        public Owner Update(Owner ownerUpdate)
-        {
-            var ownerFromDB = ReadById(ownerUpdate.Id);
+            var ownerFromDB = GetOwnerById(ownerUpdate.Id);
             if (ownerFromDB != null)
             {
-                ownerFromDB.FirstName = ownerFromDB.FirstName;
-                ownerFromDB.LastName = ownerFromDB.LastName;
-                ownerFromDB.Address = ownerFromDB.Address;
-                ownerFromDB.PhoneNumber = ownerFromDB.PhoneNumber;
-                ownerFromDB.Email = ownerFromDB.Email;
+                ownerFromDB.FirstName = ownerUpdate.FirstName;
+                ownerFromDB.LastName = ownerUpdate.LastName;
+                ownerFromDB.PhoneNumber = ownerUpdate.PhoneNumber;
+                ownerFromDB.Email = ownerUpdate.Email;
+               
                 return ownerFromDB;
             }
             return null;
         }
     }
-}
+}   

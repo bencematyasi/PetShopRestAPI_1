@@ -2,27 +2,28 @@
 using PetShopApp.Core.Entity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace PetShopApp.Infrastructure.Static.Data.Reporsitories
 {
     public class PetRepository : IPetRepository
     {
-        static int id = 1;
-        private List<Pet> _pets = new List<Pet>();
-
         public Pet Create(Pet pet)
         {
-            pet.Id = id++;
-            _pets.Add(pet);
+            pet.Id = FakeDB.PetId++;
+            var pets = FakeDB.Pets.ToList();
+            pets.Add(pet);
+            FakeDB.Pets = pets;
             return pet;
+            
         }
 
-       
+
 
         public Pet ReadById(int id)
         {
-            foreach (var pet in _pets)
+            foreach (var pet in FakeDB.Pets)
             {
                 if (pet.Id == id)
                 {
@@ -43,38 +44,29 @@ namespace PetShopApp.Infrastructure.Static.Data.Reporsitories
                 petFromDB.BirthDay = petUpdate.BirthDay;
                 petFromDB.SoldDate = petUpdate.SoldDate;
                 petFromDB.Color = petUpdate.Color;
-                petFromDB.PreviousOwner = petUpdate.PreviousOwner;
+                petFromDB.owner = petUpdate.owner;
                 petFromDB.Price = petUpdate.Price;
 
                 return petFromDB;
             }
             return null;
         }
-        public Pet Delete(int id)
+        public void Delete(int id)
         {
-            var petFound = this.ReadById(id);
-            if(petFound != null)
-            {
-                _pets.Remove(petFound);
-                return petFound;
-            }
-            return null;
-
+            var pets = FakeDB.Pets.ToList();
+            var petToDelete = pets.FirstOrDefault(p => p.Id == id);
+            pets.Remove(petToDelete);
+            FakeDB.Pets = pets;
+            
         }
         
-        public Pet ReadOne(int id)
-        {
-            return _pets[id];
-        }
+        
 
         public IEnumerable<Pet> ReadAll()
         {
+            
             return FakeDB.Pets;
         }
-
-        //public void Sorting()
-        //{
-        //    _pets.Sort();
     }
 
 }

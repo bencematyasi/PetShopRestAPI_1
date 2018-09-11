@@ -18,7 +18,7 @@ namespace PetShopApp.Core.Entity
 
         public string Color { get; set; }
 
-        public string PreviousOwner { get; set; }
+        public Owner owner  { get; set; }
 
         public double Price { get; set; }
     }

@@ -14,6 +14,7 @@ using PetShopApp.Core.ApplicationService;
 using PetShopApp.Core.DomainService;
 using PetShopApp.Infrastructure.Static.Data;
 using PetShopApp.Infrastructure.Static.Data.Reporsitories;
+using PetShopApp.Infrastructure.Static.Data.Repositories;
 
 namespace PetShop.RestApi
 {
@@ -31,6 +32,7 @@ namespace PetShop.RestApi
         {
             FakeDB.InitData();
 
+            services.AddScoped<IOwnerRepository, OwnerRepository>();
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
 

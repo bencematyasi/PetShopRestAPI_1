@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using PetShopApp.Core.DomainService;
 using PetShopApp.Core.Entity;
 
@@ -10,31 +11,25 @@ namespace PetShopApp.Core.ApplicationService
     public class PetService : IPetService
     {
         readonly IPetRepository _petRepo;
+        private  IOwnerRepository _ownerRipo;
 
-        public PetService(IPetRepository petRepository)
+        public PetService(IPetRepository petRepository, IOwnerRepository ownerRepository)
         {
             _petRepo = petRepository;
+            _ownerRipo = ownerRepository;
             
         }
-        public Pet NewPet(string name, string type, DateTime birthday, DateTime soldDate, string color, string previousOwner, double price)
+        public Pet NewPet(Pet pet)
         {
-            var pet = new Pet()
-            {
-                Name = name,
-                Type = type,
-                BirthDay = birthday,
-                SoldDate = soldDate,
-                Color = color,
-                PreviousOwner = previousOwner,
-                Price = price
-            };
+            _petRepo.Create(pet);
             return pet;
+            
         }
 
-        public Pet CreatePet(Pet pet)
-        {
-            return _petRepo.Create(pet);
-        }
+        //public Pet CreatePet(Pet pet)
+        //{
+        //    return _petRepo.Create(pet);
+        //}
 
         public Pet FindPetById(int id)
         {
@@ -43,7 +38,12 @@ namespace PetShopApp.Core.ApplicationService
 
         public List<Pet> GetAllPets()
         {
-            return _petRepo.ReadAll().ToList() ;
+            List<Pet> pets = _petRepo.ReadAll().ToList();
+            foreach (var pet in pets)
+            {
+                pet.owner = _ownerRipo.GetOwnerById(pet.owner.Id);
+            }
+            return pets;
         }
 
         public Pet UpdatePet(Pet petUpdate)
@@ -54,25 +54,20 @@ namespace PetShopApp.Core.ApplicationService
             pet.BirthDay = petUpdate.BirthDay;
             pet.SoldDate = petUpdate.SoldDate;
             pet.Color = petUpdate.Color;
-            pet.PreviousOwner = petUpdate.PreviousOwner;
+            pet.owner = petUpdate.owner;
             pet.Price = petUpdate.Price;
 
             return pet;
         }
    
-        public Pet DeletePet(int id)
+        public void DeletePet(int id)
         {
-            return _petRepo.Delete(id);
+            _petRepo.Delete(id);
         }
         
         public List<Pet> SearchType(string input)
         {
            return _petRepo.ReadAll().Where(p => p.Type == input).ToList() ;
-        }
-
-        public Pet GetOneId(Pet onePet)
-        {
-            return _petRepo.ReadOne(onePet.Id);
         }
 
         public List<Pet> SortingPetsList()

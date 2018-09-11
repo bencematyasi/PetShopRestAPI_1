@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Text;
 
-namespace PetShopApp
-{
-    public interface IPrinter
-    {
-        void StartUI();
-    }
-}
+//namespace PetShopApp
+//{
+//    public interface IPrinter
+//    {
+//        void StartUI();
+//    }
+//}
