@@ -33,17 +33,17 @@ namespace PetShopApp.Core.ApplicationService
 
         public Pet FindPetById(int id)
         {
-            return _petRepo.ReadById(id);
+            Pet pet = _petRepo.ReadAll().FirstOrDefault(o => o.Id == id);
+            pet.owner = _ownerRipo.GetOwnerById(id);
+            return pet;
+             
+            //return _petRepo.ReadById(id);
         }
 
         public List<Pet> GetAllPets()
         {
-            List<Pet> pets = _petRepo.ReadAll().ToList();
-            foreach (var pet in pets)
-            {
-                pet.owner = _ownerRipo.GetOwnerById(pet.owner.Id);
-            }
-            return pets;
+            
+            return _petRepo.ReadAll().ToList();
         }
 
         public Pet UpdatePet(Pet petUpdate)

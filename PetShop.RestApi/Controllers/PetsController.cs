@@ -40,6 +40,16 @@ namespace PetShop.RestApi.Controllers
             _petservice.NewPet(pet);
         }
 
+        // POST api/pets
+        [HttpPost ("multipost")]
+        public void Post([FromBody] Pet[] pets)
+        {
+            foreach (var pet in pets)
+            {
+                _petservice.NewPet(pet);
+            }
+        }
+
         // PUT api/pets/1
         [HttpPut("{id}")]
         public ActionResult<Pet> Put(int id, [FromBody] Pet pet)
@@ -49,7 +59,6 @@ namespace PetShop.RestApi.Controllers
                 return BadRequest("Parameter id and pet Id must be the same");
             }
             return _petservice.UpdatePet(pet);
-
         }
 
 
