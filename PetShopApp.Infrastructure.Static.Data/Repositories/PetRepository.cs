@@ -23,15 +23,7 @@ namespace PetShopApp.Infrastructure.Static.Data.Reporsitories
 
         public Pet ReadById(int id)
         {
-            foreach (var pet in FakeDB.Pets)
-            {
-                if (pet.Id == id)
-                {
-                    return pet;
-                }
-
-            }
-            return null;
+           return FakeDB.Pets.FirstOrDefault(p => p.Id == id);
         }
 
         public Pet Update(Pet petUpdate)
@@ -51,13 +43,13 @@ namespace PetShopApp.Infrastructure.Static.Data.Reporsitories
             }
             return null;
         }
-        public void Delete(int id)
+        public Pet Delete(int id)
         {
             var pets = FakeDB.Pets.ToList();
             var petToDelete = pets.FirstOrDefault(p => p.Id == id);
             pets.Remove(petToDelete);
             FakeDB.Pets = pets;
-            
+            return petToDelete;
         }
         
         

@@ -19,12 +19,13 @@ namespace PetShopApp.Infrastructure.Static.Data.Repositories
             return owner;
         }
 
-        public void DeleteOwner(int id)
+        public Owner DeleteOwner(int id)
         {
             var owners = FakeDB.Owners.ToList();
             var ownerToDelete = owners.FirstOrDefault(o => o.Id == id);
             owners.Remove(ownerToDelete);
             FakeDB.Owners = owners;
+            return ownerToDelete;
         }
 
         public Owner GetOwnerById(int id)

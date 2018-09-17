@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{56E78607-6945-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShopApp.Infrastructure.Static.Data", "PetShopApp.Infrastructure.Static.Data\PetShopApp.Infrastructure.Static.Data.csproj", "{C648D55E-502F-4059-A74D-86838E584E7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetShop.RestApi", "PetShop.RestApi\PetShop.RestApi.csproj", "{BF8E05BA-6265-439F-9855-91B8E7E8EE42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetShop.RestApi", "PetShop.RestApi\PetShop.RestApi.csproj", "{BF8E05BA-6265-439F-9855-91B8E7E8EE42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -6,15 +6,17 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using PetShopApp.Core.ApplicationService;
 using PetShopApp.Core.DomainService;
 using PetShopApp.Infrastructure.Static.Data;
-using PetShopApp.Infrastructure.Static.Data.Reporsitories;
-using PetShopApp.Infrastructure.Static.Data.Repositories;
+using PetShopApp.Infrastructure.Static.Data.SQLRepositories;
 
 namespace PetShop.RestApi
 {
@@ -32,9 +34,15 @@ namespace PetShop.RestApi
         {
             FakeDB.InitData();
 
+            services.AddDbContext<PetShopAppContext>(opt => opt.UseInMemoryDatabase("DBOne"));
             services.AddScoped<IOwnerRepository, OwnerRepository>();
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
+
+            services.AddMvc().AddJsonOptions(options => { options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+                
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
