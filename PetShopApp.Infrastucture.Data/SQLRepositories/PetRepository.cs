@@ -1,11 +1,12 @@
-﻿using PetShopApp.Core.DomainService;
+﻿using Microsoft.EntityFrameworkCore;
+using PetShopApp.Core.DomainService;
 using PetShopApp.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PetShopApp.Infrastructure.Static.Data.SQLRepositories
+namespace PetShopApp.Infrastructure.Data.SQLRepositories
 {
     public class PetRepository : IPetRepository
     {
@@ -18,9 +19,10 @@ namespace PetShopApp.Infrastructure.Static.Data.SQLRepositories
 
         public Pet Create(Pet pet)
         {
-             var newPet = _ctx.Pets.Add(pet).Entity;
+            pet.owner = _ctx.Owners.FirstOrDefault(o => o.Id == pet.owner.Id);
+            _ctx.Pets.Add(pet);
             _ctx.SaveChanges();
-            return newPet;
+            return pet;
         }
         
         public Pet Delete(int id)

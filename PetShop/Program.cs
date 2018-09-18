@@ -2,7 +2,7 @@
 using PetShopApp;
 using PetShopApp.Core.ApplicationService;
 using PetShopApp.Core.DomainService;
-using PetShopApp.Infrastructure.Static.Data.Reporsitories;
+using PetShopApp.Infrastructure.Data.Reporsitories;
 
 namespace PetShop
 {

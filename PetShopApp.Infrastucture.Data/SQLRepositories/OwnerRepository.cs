@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PetShopApp.Infrastructure.Static.Data.SQLRepositories
+namespace PetShopApp.Infrastructure.Data.SQLRepositories
 {
     public class OwnerRepository : IOwnerRepository
     {
