@@ -19,15 +19,5 @@ namespace PetShopApp.Core.ApplicationService
         
         //delete pet
         void DeletePet(int id);
-        //Search a type
-        List<Pet> SearchType(string input);
-        //Sorted list for sorted pet list show
-        List<Pet> SortingPetsList();
-        //Sorted list for get five cheapest pets 
-        List<Pet> GetFiveCheapsestPets();
-
-
-
-
     }
 }

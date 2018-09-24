@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using PetShop.Infrastructure.Data;
 using PetShopApp.Core.ApplicationService;
 using PetShopApp.Core.DomainService;
 using PetShopApp.Infrastructure.Data;
@@ -26,12 +27,13 @@ namespace PetShop.RestApi
         public void ConfigureServices(IServiceCollection services)
         {
             
-            services.AddDbContext<PetShopAppContext>(opt => opt.UseInMemoryDatabase("DBOne"));
+            services.AddDbContext<PetShopAppContext>(opt => opt.UseSqlite("Data Source=petshop.db"));
             services.AddScoped<IOwnerRepository, OwnerRepository>();
             services.AddScoped<IPetRepository, PetRepository>();
             services.AddScoped<IPetService, PetService>();
 
-            services.AddMvc().AddJsonOptions(options => { options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            services.AddMvc().AddJsonOptions(options => {
+                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
                 
@@ -45,6 +47,12 @@ namespace PetShop.RestApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                using (IServiceScope scope = app.ApplicationServices.CreateScope())
+                {
+                    PetShopAppContext ctx = scope.ServiceProvider.GetService<PetShopAppContext>();
+                    DBInitializer.SeedDB(ctx);
+                }
             }
             else
             {

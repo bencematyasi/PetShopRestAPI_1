@@ -17,7 +17,6 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
         }
         public Owner CreatOwner(Owner owner)
         {
-
             var newOwner = _ctx.Owners.Add(owner).Entity;
             _ctx.SaveChanges();
             return newOwner;

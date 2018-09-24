@@ -25,19 +25,11 @@ namespace PetShopApp.Core.ApplicationService
             return pet;
             
         }
-
-        //public Pet CreatePet(Pet pet)
-        //{
-        //    return _petRepo.Create(pet);
-        //}
-
         public Pet FindPetById(int id)
         {
             Pet pet = _petRepo.ReadAll().FirstOrDefault(o => o.Id == id);
             pet.owner = _ownerRipo.GetOwnerById(id);
             return pet;
-             
-            //return _petRepo.ReadById(id);
         }
 
         public List<Pet> GetAllPets()
@@ -48,36 +40,12 @@ namespace PetShopApp.Core.ApplicationService
 
         public Pet UpdatePet(Pet petUpdate)
         {
-            var pet = FindPetById(petUpdate.Id);
-            pet.Name = petUpdate.Name;
-            pet.Type = petUpdate.Type;
-            pet.BirthDay = petUpdate.BirthDay;
-            pet.SoldDate = petUpdate.SoldDate;
-            pet.Color = petUpdate.Color;
-            pet.owner = petUpdate.owner;
-            pet.Price = petUpdate.Price;
-
-            return pet;
+            return _petRepo.Update(petUpdate);
         }
    
         public void DeletePet(int id)
         {
             _petRepo.Delete(id);
-        }
-        
-        public List<Pet> SearchType(string input)
-        {
-           return _petRepo.ReadAll().Where(p => p.Type == input).ToList() ;
-        }
-
-        public List<Pet> SortingPetsList()
-        {
-           return _petRepo.ReadAll().OrderBy(p => p.Price).ToList();
-        }
-
-        public List<Pet> GetFiveCheapsestPets()
-        {
-            return _petRepo.ReadAll().OrderBy(p => p.Price).Take(5).ToList();
         }
     }
 }
