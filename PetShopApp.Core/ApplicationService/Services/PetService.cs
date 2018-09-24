@@ -31,7 +31,6 @@ namespace PetShopApp.Core.ApplicationService
             pet.owner = _ownerRipo.GetOwnerById(id);
             return pet;
         }
-
         public List<Pet> GetAllPets()
         {
             
@@ -46,6 +45,11 @@ namespace PetShopApp.Core.ApplicationService
         public void DeletePet(int id)
         {
             _petRepo.Delete(id);
+        }
+
+        public Pet FindPetByIdIncludeOwner(int id)
+        {
+            return _petRepo.FindPetByIdIncludeOwner(id);
         }
     }
 }

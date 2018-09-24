@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PetShopApp.Core.ApplicationService;
 using PetShopApp.Core.DomainService;
 using PetShopApp.Core.Entity;
 
@@ -14,10 +15,12 @@ namespace PetShop.RestApi.Controllers
     public class OwnersController : ControllerBase
     {
         private readonly IOwnerRepository _ownerRepository;
+       
 
         public OwnersController(IOwnerRepository ownerRepository)
         {
             _ownerRepository = ownerRepository;
+           
         }
 
         // GET api/owners
@@ -31,7 +34,8 @@ namespace PetShop.RestApi.Controllers
         [HttpGet("{id}")]
         public Owner Get(int id)
         {
-             return _ownerRepository.GetOwnerById(id);
+           
+            return _ownerRepository.FindOwnerByIdIncludePets(id);
         }
 
         // POST api/owners

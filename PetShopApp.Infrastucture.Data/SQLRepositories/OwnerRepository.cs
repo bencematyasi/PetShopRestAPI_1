@@ -1,4 +1,5 @@
-﻿using PetShopApp.Core.DomainService;
+﻿using Microsoft.EntityFrameworkCore;
+using PetShopApp.Core.DomainService;
 using PetShopApp.Core.Entity;
 using System;
 using System.Collections.Generic;
@@ -24,10 +25,18 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
 
         public Owner DeleteOwner(int id)
         {
+
+            var petToDelete = _ctx.Pets.Where(p => p.owner.Id == id);
+            _ctx.RemoveRange(petToDelete);
             var ownerId = GetOwnerById(id);
             _ctx.Owners.Remove(ownerId);
             _ctx.SaveChanges();
             return ownerId;
+        }
+
+        public Owner FindOwnerByIdIncludePets(int id)
+        {
+            return _ctx.Owners.Where(o => o.Id == id).Include(o => o.Pets).FirstOrDefault();
         }
 
         public Owner GetOwnerById(int id)

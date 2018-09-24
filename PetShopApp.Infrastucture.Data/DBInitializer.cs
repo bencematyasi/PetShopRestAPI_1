@@ -12,27 +12,24 @@ namespace PetShop.Infrastructure.Data
             ctx.Database.EnsureDeleted();
             ctx.Database.EnsureCreated();
 
-            Owner owner1 = new Owner
+            Owner owner1 = ctx.Owners.Add(new Owner
             {
                 FirstName = "James",
                 LastName = "McAdams",
                 Address = "11 Daytona Road",
                 Email = "jamesmcadams@fakemail.com",
                 PhoneNumber = "4550798879"
-            };
+            }).Entity;
 
-            Owner owner2 = new Owner
+            Owner owner2 = ctx.Owners.Add( new Owner
             {
                 FirstName = "Jose",
                 LastName = "Murdan",
                 Address = "7 Fakey Street",
                 Email = "josemurdan@fakemail.com",
                 PhoneNumber = "57972647"
-            };
-
-            ctx.Owners.Add(owner1);
-            ctx.Owners.Add(owner2);
-
+            }).Entity;
+            
             Pet pet1 = new Pet
             {
                 Name = "Don",

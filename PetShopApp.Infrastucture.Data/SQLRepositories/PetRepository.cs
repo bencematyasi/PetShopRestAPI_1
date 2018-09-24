@@ -33,6 +33,11 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
             return petId;
         }
 
+        public Pet FindPetByIdIncludeOwner(int id)
+        {
+            return _ctx.Pets.Where(p => p.Id == id).Include(p => p.owner).FirstOrDefault();
+        }
+
         public IEnumerable<Pet> ReadAll()
         {
             return _ctx.Pets.ToList();
