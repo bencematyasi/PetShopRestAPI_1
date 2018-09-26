@@ -37,7 +37,21 @@ namespace PetShop.RestApi.Controllers
         [HttpPost]
         public void Post([FromBody] Pet pet)
         {
+
+            if (pet.Name == null)
+            {
+                BadRequest("The pet has no name");
+            }
+            else if (pet.Price < 0)
+            {
+                BadRequest("The pet cannot have a minus price");
+            }
+            else if (pet.Type == null)
+            {
+                BadRequest("The pet has no type");
+            }
             _petservice.NewPet(pet);
+            Ok(pet.Name + " pet has been added");
         }
 
         // POST api/pets
@@ -47,6 +61,7 @@ namespace PetShop.RestApi.Controllers
             foreach (var pet in pets)
             {
                 _petservice.NewPet(pet);
+                Ok(pet.Name + " pet has been added");
             }
         }
 
@@ -58,7 +73,8 @@ namespace PetShop.RestApi.Controllers
             {
                 return BadRequest("Parameter id and pet Id must be the same");
             }
-            return _petservice.UpdatePet(pet);
+             _petservice.UpdatePet(pet);
+            return Ok(pet.Name + " pet has been updated");
         }
 
 
@@ -67,7 +83,7 @@ namespace PetShop.RestApi.Controllers
         public ActionResult<Pet> Delete(int id)
         {
             _petservice.DeletePet(id);
-            return Ok("Deleted");
+            return Ok("Pet with " + id + " have been deleted");
         }
     }
 }

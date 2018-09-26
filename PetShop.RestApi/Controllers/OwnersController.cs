@@ -30,11 +30,12 @@ namespace PetShop.RestApi.Controllers
             return _ownerRepository.ReadAll().ToList();
         }
 
+
+
         // GET api/owners/1
         [HttpGet("{id}")]
         public Owner Get(int id)
         {
-           
             return _ownerRepository.FindOwnerByIdIncludePets(id);
         }
 
@@ -42,7 +43,33 @@ namespace PetShop.RestApi.Controllers
         [HttpPost]
         public void Post([FromBody] Owner owner)
         {
+            if(owner.FirstName == null)
+            {
+                BadRequest("The owner has no firstname");
+            }
+            else if(owner.LastName == null)
+            {
+                BadRequest("The owner has no lastname");
+            }
+            else if(owner.Address == null)
+            {
+                BadRequest("The owner has no address");
+            }
+
              _ownerRepository.CreatOwner(owner);
+            Ok(owner.FirstName + " " + owner.LastName + " owner has been added");
+
+        }
+        [HttpPost("multipost")]
+        public void MultiPost([FromBody] Owner[] owners)
+        {
+            
+            foreach (var owner in owners)
+            {
+                _ownerRepository.CreatOwner(owner);
+                Ok("The owner with " + owner.FirstName + " " + owner.LastName + "have been added to the database");
+            }
+
         }
 
         // PUT api/owners/5
@@ -53,17 +80,17 @@ namespace PetShop.RestApi.Controllers
             {
                 return BadRequest("Parameter id and pet Id must be the same");
             }
-            return _ownerRepository.UpdateOwner(owner);
-
+             _ownerRepository.UpdateOwner(owner);
+            return Ok(owner.FirstName + " " + owner.LastName + " owner has been updated");
         }
 
 
         // DELETE api/owners/5
         [HttpDelete("{id}")]
-        public ActionResult<Pet> Delete(int id)
+        public ActionResult<Owner> Delete(int id)
         {
             _ownerRepository.DeleteOwner(id);
-            return Ok("Owner with" + id + "have been deleted");
+            return Ok("Owner with " + id + " have been deleted");
         }
     }
 }
