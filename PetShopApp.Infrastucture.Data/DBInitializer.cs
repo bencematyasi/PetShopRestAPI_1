@@ -84,12 +84,25 @@ namespace PetShop.Infrastructure.Data
                 owner = owner2,
                 Price = 624.36
             };
-            
+
+
+            Pet pet6 = new Pet
+            {
+                Name = "fishyMisi",
+                Type = "Fish",
+                BirthDay = DateTime.Now.AddYears(-12),
+                SoldDate = DateTime.Now.AddMonths(-96),
+                Color = "fos",
+                owner = null,
+                Price = 14.9
+            };
+
             ctx.Pets.Add(pet1);
             ctx.Pets.Add(pet2);
             ctx.Pets.Add(pet3);
             ctx.Pets.Add(pet4);
             ctx.Pets.Add(pet5);
+            ctx.Pets.Add(pet6);
            
             ctx.SaveChanges();
         }

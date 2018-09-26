@@ -37,9 +37,10 @@ namespace PetShopApp.Core.ApplicationService
             return _petRepo.ReadAll().ToList();
         }
 
-        public Pet UpdatePet(Pet petUpdate)
+        public Pet UpdatePet(Pet pet)
         {
-            return _petRepo.Update(petUpdate);
+            _petRepo.Update(pet);
+            return pet;
         }
    
         public void DeletePet(int id)

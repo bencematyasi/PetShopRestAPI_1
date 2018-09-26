@@ -63,7 +63,7 @@ namespace PetShop.RestApi.Controllers
         public ActionResult<Pet> Delete(int id)
         {
             _ownerRepository.DeleteOwner(id);
-            return Ok("Deleted");
+            return Ok("Owner with" + id + "have been deleted");
         }
     }
 }

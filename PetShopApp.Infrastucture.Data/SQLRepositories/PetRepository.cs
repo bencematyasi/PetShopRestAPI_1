@@ -19,7 +19,11 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
 
         public Pet Create(Pet pet)
         {
-            pet.owner = _ctx.Owners.FirstOrDefault(o => o.Id == pet.owner.Id);
+            var changeTracker = _ctx.ChangeTracker.Entries<Pet>();
+            if (pet.owner != null)
+            {
+                _ctx.Attach(pet.owner);
+            }
             _ctx.Pets.Add(pet);
             _ctx.SaveChanges();
             return pet;
@@ -50,7 +54,8 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
 
         public Pet Update(Pet petUpdate)
         {
-            _ctx.Pets.Update(petUpdate);
+            _ctx.Attach(petUpdate).State = EntityState.Modified;
+            _ctx.Entry(petUpdate).Reference(p => p.owner).IsModified = true;
             _ctx.SaveChanges();
             return petUpdate;
         }

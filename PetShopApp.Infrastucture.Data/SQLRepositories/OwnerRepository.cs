@@ -25,9 +25,6 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
 
         public Owner DeleteOwner(int id)
         {
-
-            var petToDelete = _ctx.Pets.Where(p => p.owner.Id == id);
-            _ctx.RemoveRange(petToDelete);
             var ownerId = GetOwnerById(id);
             _ctx.Owners.Remove(ownerId);
             _ctx.SaveChanges();
@@ -41,6 +38,7 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
 
         public Owner GetOwnerById(int id)
         {
+            var changeTracker = _ctx.ChangeTracker.Entries<Owner>();
             return _ctx.Owners.FirstOrDefault(owner => owner.Id == id);   
         }
 
@@ -51,7 +49,8 @@ namespace PetShopApp.Infrastructure.Data.SQLRepositories
 
         public Owner UpdateOwner(Owner ownerUpdate)
         {
-            _ctx.Owners.Update(ownerUpdate);
+            _ctx.Attach(ownerUpdate).State = EntityState.Modified;
+            _ctx.Entry(ownerUpdate).Collection(o => o.Pets).IsModified = true;
             _ctx.SaveChanges();
             return ownerUpdate;
         }

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿ using Microsoft.EntityFrameworkCore;
 using PetShopApp.Core.Entity;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,8 @@ namespace PetShopApp.Infrastructure.Data
         {
             modelBuilder.Entity<Pet>()
                 .HasOne(p => p.owner)
-                .WithMany(o => o.Pets);
+                .WithMany(o => o.Pets)
+                .OnDelete(DeleteBehavior.SetNull);
         }
 
 
