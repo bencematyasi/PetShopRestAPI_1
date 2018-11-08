@@ -19,5 +19,14 @@ namespace PetShopApp.Core.Entity
         public string Email { get; set; }
 
         public List<Pet> Pets { get; set; }
+
+        //CDS course, autentication
+        public string Username { get; set; }
+
+        public byte[] PasswordHash { get; set; }
+
+        public byte[] PasswordSalt { get; set; }
+
+        public bool IsAdmin { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetShopApp.Core.ApplicationService;
@@ -24,55 +25,89 @@ namespace PetShop.RestApi.Controllers
         }
 
         // GET api/owners
+        [Authorize]
         [HttpGet]
         public ActionResult<IEnumerable<Owner>> Get()
         {
             return _ownerRepository.ReadAll().ToList();
         }
 
-
+        // GET api/owners/1
+        [Authorize]
+        [HttpGet("{id}", Name = "Get")]
+        public Owner Get(int id)
+        {
+            return _ownerRepository.GetOwnerById(id);
+        }
 
         // GET api/owners/1
+        [Authorize]
         [HttpGet("{id}")]
-        public Owner Get(int id)
+        public Owner GetOwner(int id)
         {
             return _ownerRepository.FindOwnerByIdIncludePets(id);
         }
 
         // POST api/owners
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
-        public void Post([FromBody] Owner owner)
+        public ActionResult<Owner> Post([FromBody] Owner owner)
         {
-            if(owner.FirstName == null)
+            Owner result = null;
+                if(owner.FirstName == null)
+                {
+                    BadRequest("The owner has no firstname");
+                }
+                else if(owner.LastName == null)
+                {
+                    BadRequest("The owner has no lastname");
+                }
+                else if(owner.Address == null)
+                {
+                    BadRequest("The owner has no address");
+                }
+
+            try
             {
-                BadRequest("The owner has no firstname");
+                result = _ownerRepository.CreatOwner(owner);
             }
-            else if(owner.LastName == null)
+            catch (Exception e)
             {
-                BadRequest("The owner has no lastname");
-            }
-            else if(owner.Address == null)
-            {
-                BadRequest("The owner has no address");
+                return BadRequest(e.Message);
             }
 
-             _ownerRepository.CreatOwner(owner);
-            Ok(owner.FirstName + " " + owner.LastName + " owner has been added");
+                if  (result != null)
+                {
+                   return Ok("Owner with ID: " + owner.Id + " has been added!");
+                }
+                else
+                {
+                    return BadRequest("Something went wrong!");
+                }
 
         }
+        // Post api/pets/multipost
+        [Authorize(Roles = "Administrator")]
         [HttpPost("multipost")]
-        public void MultiPost([FromBody] Owner[] owners)
+        public ActionResult<Owner> PostMulti([FromBody] Owner[] owners)
         {
-            
-            foreach (var owner in owners)
-            {
-                _ownerRepository.CreatOwner(owner);
-                Ok("The owner with " + owner.FirstName + " " + owner.LastName + "have been added to the database");
-            }
 
+            bool passed = true;
+            foreach (Owner owner in owners)
+            {
+                Owner result = _ownerRepository.CreatOwner(owner);
+                if (result == null)
+                    passed = false;
+            }
+            if (passed)
+                return Ok("Owners with has been added!");
+            else
+                return BadRequest("Something went wrong!");
         }
+
 
         // PUT api/owners/5
+        [Authorize(Roles = "Administrator")]
         [HttpPut("{id}")]
         public ActionResult<Owner> Put(int id, [FromBody] Owner owner)
         {
@@ -80,17 +115,24 @@ namespace PetShop.RestApi.Controllers
             {
                 return BadRequest("Parameter id and pet Id must be the same");
             }
-             _ownerRepository.UpdateOwner(owner);
-            return Ok(owner.FirstName + " " + owner.LastName + " owner has been updated");
+            Owner result = _ownerRepository.UpdateOwner(owner);
+            if (result != null)
+                return Ok("Owner with ID: " + id + " has been updated!");
+            else
+                return BadRequest("Something went wrong!");
         }
 
 
         // DELETE api/owners/5
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public ActionResult<Owner> Delete(int id)
         {
-            _ownerRepository.DeleteOwner(id);
-            return Ok("Owner with " + id + " have been deleted");
+            Owner result = _ownerRepository.DeleteOwner(id);
+            if (result != null)
+                return Ok("Owner with ID: " + id + " has been deleted!");
+            else
+                return BadRequest("Something went wrong!");
         }
     }
 }
