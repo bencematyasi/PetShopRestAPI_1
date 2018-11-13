@@ -15,6 +15,7 @@ namespace PetShop.Infrastructure.Data
             string password = "1234";
             byte[] passwordHash, passwordSalt;
             CreatePasswordHash(password, out passwordHash, out passwordSalt);
+            Console.WriteLine();
 
             Owner owner1 = new Owner
             {
