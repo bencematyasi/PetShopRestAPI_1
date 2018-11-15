@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PetShopApp.Core.ApplicationService;
 using PetShopApp.Core.DomainService;
 using PetShopApp.Core.Entity;
 
@@ -34,19 +31,19 @@ namespace PetShop.RestApi.Controllers
 
         // GET api/owners/1
         [Authorize]
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public Owner Get(int id)
         {
             return _ownerRepository.GetOwnerById(id);
         }
 
-        // GET api/owners/1
-        [Authorize]
-        [HttpGet("{id}")]
-        public Owner GetOwner(int id)
-        {
-            return _ownerRepository.FindOwnerByIdIncludePets(id);
-        }
+        //// GET api/owners/1
+        ////[Authorize]
+        //[HttpGet("{id}")]
+        //public Owner GetOwner(int id)
+        //{
+        //    return _ownerRepository.FindOwnerByIdIncludePets(id);
+        //}
 
         // POST api/owners
         [Authorize(Roles = "Administrator")]
